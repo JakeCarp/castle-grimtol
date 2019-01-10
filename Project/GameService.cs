@@ -7,10 +7,63 @@ namespace CastleGrimtol.Project
 {
   public class GameService : IGameService
   {
+    //building props
     public IRoom CurrentRoom { get; set; }
     public Player CurrentPlayer { get; set; }
     public bool Playing { get; set; }
+    public Dictionary<String, String> ItemUseGuide { get; set; }
 
+    public Dictionary<String, String> HazardGuide { get; set; }
+
+    public enum gameActions
+    {
+      //navigation
+      #region
+      goSouth,
+      goNorth,
+      goEast,
+      goWest,
+      goNorthEast,
+      goNorthWest,
+      goSouthEast,
+      goSouthWest,
+      goDown,
+      goUp,
+      #endregion
+      //console commands
+      #region
+      help,
+      wait,
+      gameQuit,
+      gameReset,
+      #endregion
+      //context commands
+      #region
+      lookRoom,
+      playerInventory,
+      useHammerOnLock,
+      useHammerOnMonster,
+      useHammerOnPerson,
+      takeHammer,
+      #endregion
+    }
+    public void setCurrentPlayer(string name)
+    {
+      Player yaBoi = new Player(name);
+      CurrentPlayer = yaBoi;
+    }
+    public void Setup()
+    {
+      Playing = true;
+      //creating rooms
+      #region 
+      Room constructionSite = new Room("Construction Site", "You are In construction site", false);
+      Room wreckedClearing = new Room("Wrecked Clearing", "You are In wrecked clearing", false);
+      Room smallBunkerEntrance = new Room("Small Bunker Entrance", "You are In small bunker entrance", false);
+      Room hallway1 = new Room("Hallway 1", "You are In hallway 1", true);
+      Room storage1 = new Room("Storage 1", "You are In storage 1", false);
+      Room securityCheck1 = new Room("Security Checkpoint 1", "You are In security checkpoint 1", false);
+      Room hallway2 = new Room("Hallway 2", "You are In hallway 2", false);
 
       #endregion
       //creating items
@@ -42,9 +95,13 @@ namespace CastleGrimtol.Project
       #endregion
       //build item use dictionary
       #region 
-      itemUseGuide = new Dictionary<string, string>();
-      itemUseGuide.Add("worn hammer-lock", "thing happens");
-      itemUseGuide.Add("worn hammer-jack", "thing happens");
+      ItemUseGuide = new Dictionary<string, string>();
+      ItemUseGuide.Add("worn hammer-lock", "thing happens");
+      ItemUseGuide.Add("worn hammer-jack", "thing happens");
+      #endregion
+      //building hazard dictionary
+      #region 
+
       #endregion
       CurrentRoom = constructionSite;
     }
@@ -125,6 +182,8 @@ namespace CastleGrimtol.Project
         return gameActions.gameReset;
       };
       #endregion
+      //context commands
+      #region
       if (input.Contains("use") && input.Contains("hammer") && input.Contains("lock"))
       {
         return gameActions.useHammerOnLock;
@@ -133,51 +192,92 @@ namespace CastleGrimtol.Project
       {
         return gameActions.takeHammer;
       }
+      #endregion
 
       return gameActions.wait;
     }
     public void GetUserInput()
     {
-      //parsing user input
+      //assigning user input
       #region 
       String rawUserInput = Console.ReadLine();
-      String[] split = rawUserInput.Split(' ');
-      String command = split[0].ToLower();
-      String modifier = split[1].ToLower();
-
+      gameActions action = Parse(rawUserInput);
 
       #endregion
-      switch (command)
+      switch (action)
       {
-        case "go":
-          Go(modifier);
+        //navigation
+        #region
+        case gameActions.goNorth:
+          Go("north");
           break;
-        case "help":
+        case gameActions.goEast:
+          Go("east");
+          break;
+        case gameActions.goSouth:
+          Go("south");
+          break;
+        case gameActions.goWest:
+          Go("west");
+          break;
+        case gameActions.goDown:
+          Go("down");
+          break;
+        case gameActions.goUp:
+          Go("up");
+          break;
+        case gameActions.goNorthWest:
+          Go("northwest");
+          break;
+        case gameActions.goNorthEast:
+          Go("northeast");
+          break;
+        case gameActions.goSouthEast:
+          Go("southeast");
+          break;
+        case gameActions.goSouthWest:
+          Go("southwest");
+          break;
+        #endregion
+        //console commands
+        #region
+        case gameActions.help:
           Help();
           break;
-        case "look":
-          Look();
-          break;
-        case "quit":
-          Quit();
-          break;
-        case "use":
-          UseItem("modifier");
-          break;
-        case "take":
-          TakeItem(modifier);
-          break;
-        case "inventory":
+        case gameActions.playerInventory:
           Inventory();
           break;
+        case gameActions.gameQuit:
+          Quit();
+          break;
+        #endregion
+        //context commands
+        #region
+        case gameActions.useHammerOnLock:
+          UseItem("worn hammer", "lock");
+          break;
+        case gameActions.takeHammer:
+          TakeItem("worn hammer");
+          break;
+        case gameActions.lookRoom:
+          Look();
+          break;
+          #endregion
       }
     }
 
+    //command methods
+    #region
     public void Go(string direction)
     {
       if (!CurrentRoom.Exits.ContainsKey(direction))
       {
         System.Console.WriteLine("There's Nothing in that Direction");
+        return;
+      };
+      if (CurrentRoom.Exits[direction].Locked == true)
+      {
+        System.Console.WriteLine("its locked");
         return;
       }
       CurrentRoom = CurrentRoom.Exits[direction];
@@ -212,66 +312,58 @@ namespace CastleGrimtol.Project
 
     }
 
-    public void Setup()
-    {
-      Playing = true;
-      //creating rooms
-      #region 
-      Room constructionSite = new Room("Construction Site", "You are In construction site");
-      Room wreckedClearing = new Room("Wrecked Clearing", "You are In wrecked clearing");
-      Room smallBunkerEntrance = new Room("Small Bunker Entrance", "You are In small bunker entrance");
-      Room hallway1 = new Room("Hallway 1", "You are In hallway 1");
-      Room storage1 = new Room("Storage 1", "You are In storage 1");
-      Room securityCheck1 = new Room("Security Checkpoint 1", "You are In security checkpoint 1");
-      Room hallway2 = new Room("Hallway 2", "You are In hallway 2");
 
-      #endregion
-      //creating items
-      #region 
-      Item wornHammer = new Item("Worn Hammer", "A very old hammer that your father gave you. It's seen more than it's fair share of work, but it hasn't failed you yet.");
-
-      #endregion
-      //adding Exits
-      #region 
-      constructionSite.Exits.Add("east", wreckedClearing);
-      wreckedClearing.Exits.Add("west", constructionSite);
-      wreckedClearing.Exits.Add("south", smallBunkerEntrance);
-      smallBunkerEntrance.Exits.Add("north", wreckedClearing);
-      smallBunkerEntrance.Exits.Add("down", hallway1);
-      #endregion
-      //adding items
-      #region 
-      constructionSite.Items.Add(wornHammer);
-      #endregion
-      CurrentRoom = constructionSite;
-    }
-
-    public void setCurrentPlayer(string name)
+    public void Clear()
     {
-      Player yaBoi = new Player(name);
-      CurrentPlayer = yaBoi;
-    }
-    public void StartGame()
-    {
+      Console.Clear();
     }
     public void Intro()
     {
-      System.Console.WriteLine("starting game");
+      System.Console.WriteLine("");
     }
     public void TakeItem(string itemName)
     {
       Item targetItem = CurrentRoom.Items.Find(i =>
       {
-        return i.Name == itemName;
+        return i.Name.ToLower() == itemName;
       });
       CurrentPlayer.Inventory.Add(targetItem);
       CurrentRoom.Items.Remove(targetItem);
       System.Console.WriteLine($"You Pickup the {targetItem.Name}");
     }
 
-    public void UseItem(string itemName)
+    public void UseItem(string itemName, string targetName)
     {
+      string thing = $"{itemName}-{targetName}";
+      if (!ItemUseGuide.ContainsKey(thing))
+      {
+        System.Console.WriteLine("I can't do that");
+      };
+      switch (thing)
+      {
+        case "worn hammer-lock":
+          if (CurrentRoom.Name == "Small Bunker Entrance")
+          {
+            CurrentRoom.Exits["down"].Locked = false;
+            System.Console.WriteLine("you break the lock");
+          }
+          else
+          {
+            System.Console.WriteLine("I cant do that");
+            return;
+          }
+          Go("down");
+          break;
+      }
 
     }
+    public void YouDied(string hazard)
+    {
+      switch (hazard)
+      {
+
+      }
+    }
+    #endregion
   }
 }

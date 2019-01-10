@@ -14,9 +14,6 @@ namespace CastleGrimtol.Project.Interfaces
     //Restarts the game 
     void Reset();
 
-    //Setup and Starts the Game loop
-    void StartGame();
-
     //Gets the user input and calls the appropriate command
     void GetUserInput();
 
@@ -40,7 +37,7 @@ namespace CastleGrimtol.Project.Interfaces
     //No need to Pass a room since Items can only be used in the CurrentRoom
     //Make sure you validate the item is in the room or player inventory before
     //being able to use the item
-    void UseItem(string itemName);
+    void UseItem(string itemName, string targetName);
 
     //Print the list of items in the players inventory to the console
     void Inventory();
