@@ -5,13 +5,14 @@ namespace CastleGrimtol.Project.Models
 {
   public class Room : IRoom
   {
-    public Room(string name, string desc, bool locked)
+    public Room(string name, string desc, bool locked, string ending)
     {
       Name = name;
       Description = desc;
       Items = new List<Item>();
       Exits = new Dictionary<string, IRoom>();
       Locked = locked;
+      Ending = ending;
     }
     public string Name { get; set; }
     public string Description { get; set; }
@@ -19,5 +20,6 @@ namespace CastleGrimtol.Project.Models
     public Dictionary<string, IRoom> Exits { get; set; }
 
     public bool Locked { get; set; }
+    public string Ending { get; set; }
   }
 }

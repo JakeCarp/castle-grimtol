@@ -57,13 +57,13 @@ namespace CastleGrimtol.Project
       Playing = true;
       //creating rooms
       #region 
-      Room constructionSite = new Room("Construction Site", "You are In construction site", false);
-      Room wreckedClearing = new Room("Wrecked Clearing", "You are In wrecked clearing", false);
-      Room smallBunkerEntrance = new Room("Small Bunker Entrance", "You are In small bunker entrance", false);
-      Room hallway1 = new Room("Hallway 1", "You are In hallway 1", true);
-      Room storage1 = new Room("Storage 1", "You are In storage 1", false);
-      Room securityCheck1 = new Room("Security Checkpoint 1", "You are In security checkpoint 1", false);
-      Room hallway2 = new Room("Hallway 2", "You are In hallway 2", false);
+      Room constructionSite = new Room("Construction Site", "You are In construction site, there is a hammer on the ground. you see to the east there is a clearing full of wreckage. In all other directions there is unending forest ", false, "none");
+      Room wreckedClearing = new Room("Wrecked Clearing", "You are In wrecked clearing. To the west there is a construction site for a small cottage, to the south you make out a small concrete building", false, "none");
+      Room smallBunkerEntrance = new Room("Small Bunker Entrance", "You are at the entrance to a small bunker, you see there is a rusted lock on the metal door leading down. back north is the wrecked clearing you came from.", false, "none");
+      Room hallway1 = new Room("Hallway 1", "You are In a dimly lit hallway. to the south is what appears to be a small storage closet, back up the stairs is the small bunker entrance to the southwest is what appears to be a security check room, and further to the east is another hallway", true, "none");
+      Room storage1 = new Room("Storage 1", "You are In storage 1", false, "death by janitor");
+      Room securityCheck1 = new Room("Security Checkpoint 1", "You are In a security checkpoint ", false, "temp win");
+      Room hallway2 = new Room("Hallway 2", "You are In another dimly lit hallway, back west is the first hallway, to the southwest is another entrance into the security checkpoint. Your path down this hallway is blocked by a pile of rubble", false, "none");
 
       #endregion
       //creating items
@@ -280,12 +280,30 @@ namespace CastleGrimtol.Project
         System.Console.WriteLine("its locked");
         return;
       }
+      if (CurrentRoom.Exits[direction].Ending == "death by janitor")
+      {
+        System.Console.WriteLine("you open the storage room door, doubtfull that you'll find anything of interest. As you do you are struck in the face by something long and blunt. There is a rather scared looking man in a janitorial uniform relentlessly beating you with a broom handle. You can't even release a word of protest before you are stricken unconcious");
+        Console.WriteLine("Game Over");
+        Playing = false;
+      }
+      if (CurrentRoom.Exits[direction].Ending == "temp win")
+      {
+        System.Console.WriteLine("you've won the game, unforntuantly becuase I have yet to complete the story this is where your journey ends for now");
+        Playing = false;
+      }
       CurrentRoom = CurrentRoom.Exits[direction];
     }
 
     public void Help()
     {
-      System.Console.WriteLine("this is help");
+      System.Console.WriteLine(@"commands:
+      Help- prints a list of the possible commands 
+      Inventory- checks your current inventory
+      Quit- exits the game
+      Look- prints the description of your current environment
+      Go <direction> - moves you from room to room
+      Take <item name> - places and item from the room into your inventory
+      Use <item name> on <item name> - uses an item from your inventory on another");
     }
 
     public void Inventory()

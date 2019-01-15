@@ -11,5 +11,6 @@ namespace CastleGrimtol.Project.Interfaces
     Dictionary<string, IRoom> Exits { get; set; }
 
     bool Locked { get; set; }
+    public string Ending { get; set}
   }
 }
