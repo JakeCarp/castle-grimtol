@@ -64,6 +64,8 @@ namespace CastleGrimtol.Project
       Room storage1 = new Room("Storage 1", "You are In storage 1", false, "death by janitor");
       Room securityCheck1 = new Room("Security Checkpoint 1", "You are In a security checkpoint ", false, "temp win");
       Room hallway2 = new Room("Hallway 2", "You are In another dimly lit hallway, back west is the first hallway, to the southwest is another entrance into the security checkpoint. Your path down this hallway is blocked by a pile of rubble", false, "none");
+      Room hallway3 = new Room("Hallway 3", "The previous hallway opens up into a wider passage dimly lit by guiding emergency lights. You can't see what lies at the far end of the hallway but you do see a small hatch in the wall to your northeast, a large doorway opening in the wall to the east and a door opposite that to the west. further south down the hallway lies the unknown.", false, "none");
+      Room
 
       #endregion
       //creating items
@@ -80,13 +82,14 @@ namespace CastleGrimtol.Project
       smallBunkerEntrance.Exits.Add("down", hallway1);
       hallway1.Exits.Add("up", smallBunkerEntrance);
       hallway1.Exits.Add("south", storage1);
-      hallway1.Exits.Add("southwast", securityCheck1);
+      hallway1.Exits.Add("southwest", securityCheck1);
       hallway1.Exits.Add("east", hallway2);
       storage1.Exits.Add("north", hallway1);
       securityCheck1.Exits.Add("northwest", hallway1);
       securityCheck1.Exits.Add("southeast", hallway2);
       hallway2.Exits.Add("west", hallway1);
       hallway2.Exits.Add("southwest", securityCheck1);
+
 
       #endregion
       //adding items
