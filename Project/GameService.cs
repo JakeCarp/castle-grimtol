@@ -65,7 +65,6 @@ namespace CastleGrimtol.Project
       Room securityCheck1 = new Room("Security Checkpoint 1", "You are In a security checkpoint ", false, "temp win");
       Room hallway2 = new Room("Hallway 2", "You are In another dimly lit hallway, back west is the first hallway, to the southwest is another entrance into the security checkpoint. Your path down this hallway is blocked by a pile of rubble", false, "none");
       Room hallway3 = new Room("Hallway 3", "The previous hallway opens up into a wider passage dimly lit by guiding emergency lights. You can't see what lies at the far end of the hallway but you do see a small hatch in the wall to your northeast, a large doorway opening in the wall to the east and a door opposite that to the west. further south down the hallway lies the unknown.", false, "none");
-      Room
 
       #endregion
       //creating items
